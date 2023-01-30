@@ -6,15 +6,15 @@
    "password": "recipe123",
    "database": "postgres",
    "synchronize": true,
-   "logging": false,
+   "logging": true,
    "entities": [
-      "src/entity/**/*.ts"
+      "./src/entity/**/*.ts"
    ],
    "migrations": [
-      "src/migration/**/*.ts"
+      "./src/migration/**/*.ts"
    ],
    "subscribers": [
-      "src/subscriber/**/*.ts"
+      "./src/subscriber/**/*.ts"
    ],
    "cli": {
       "entitiesDir": "src/entity",
