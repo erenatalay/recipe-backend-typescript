@@ -1,3 +1,6 @@
+import { getRepository } from "typeorm";
+
+
 class BaseService {
     BaseModel: any
     constructor(model) {
@@ -5,11 +8,11 @@ class BaseService {
     }
     list(where) {
         if (where) {
-            return this.BaseModel.findMany({
+            return getRepository(this.BaseModel).find({
                 where,
             });
         }
-        return this.BaseModel.findMany({
+        return getRepository(this.BaseModel).find({
 
         });
     }

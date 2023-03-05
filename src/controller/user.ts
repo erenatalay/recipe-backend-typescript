@@ -1,11 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { User } from "../entity/User";
-import { getRepository } from "typeorm";
+const UserService = require("../services/UserService")
 
 class Users {
   async getUser(req: Request, res: Response, next: NextFunction) {
-    const userRepository = getRepository(User);
-    const user = userRepository.find();
+    const user = UserService.list();
     res.status(200).send({
       data: user,
       message: "Successfully",
