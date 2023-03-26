@@ -2,12 +2,19 @@ import { Request, Response, NextFunction } from "express";
 const UserService = require("../services/UserService");
 const { generateAccessToken, generateRefreshToken,passwordToHash } = require("../utils/helper");
 class Users {
-  async getUser(req: Request, res: Response, next: NextFunction) {
-    const user = UserService.list();
-    res.status(200).send({
-      data: user,
-      message: "Successfully",
+  async getUser(req: any, res: Response, next: NextFunction) {
+  try {
+    const id = req.user.id
+    const user = await UserService.find({id});
+    res.status(200).json({
+        success: true,
+        data: user
+    })
+  } catch (error) {
+    res.status(500).send({
+      message: "Server Internal Error",
     });
+  }
   }
   async createUser(req: Request, res: Response, next: NextFunction) {
     try {
@@ -51,5 +58,8 @@ class Users {
     }
 
   }
+
 }
+
+
 module.exports = new Users();

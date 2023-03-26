@@ -27,7 +27,9 @@ export class User {
     @Column({ unique: true })
     email: string;
 
-    @Column()
+    @Column({
+        select :false
+    })
     password: string;
     
     @Column({
@@ -49,7 +51,7 @@ export class User {
     status: Status;
 
     @Column({
-        nullable : true
+        nullable : true,
     })
     activation_code: string;
     
