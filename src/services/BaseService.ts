@@ -1,33 +1,32 @@
 import { getRepository } from "typeorm";
 
-
 class BaseService {
-    BaseModel: any
-    constructor(model) {
-        this.BaseModel = model;
+  BaseModel: any;
+  constructor(model) {
+    this.BaseModel = model;
+  }
+  list(where) {
+    if (where) {
+      return getRepository(this.BaseModel).find({
+        where,
+      });
     }
-    list(where) {
-        if (where) {
-            return getRepository(this.BaseModel).find({
-                where,
-            });
-        }
-        return getRepository(this.BaseModel).find({
-
-        });
-    }
-    insert(data) {
-        return this.BaseModel.create({ data })
-    }
-    read(data) {
-        return this.BaseModel.findFirst({ where: data });
-    }
-    modify(data, id) {
-        return this.BaseModel.update({ data, where: { id } })
-    }
-    delete(id) {
-        return this.BaseModel.delete({ where: { id } })
-    }
+    return getRepository(this.BaseModel).find({});
+  }
+   create(data) {
+    const model = getRepository(this.BaseModel);
+    const createData = model.create(data);
+    return model.save(createData);
+  }
+  find(data) {
+    return  getRepository(this.BaseModel).findOne({ where: data });
+  }
+  update(data, id) {
+    return this.BaseModel.update({ data, where: { id } });
+  }
+  delete(id) {
+    return this.BaseModel.delete({ where: { id } });
+  }
 }
 
 module.exports = BaseService;

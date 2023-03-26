@@ -30,7 +30,9 @@ export class User {
     @Column()
     password: string;
     
-    @Column()
+    @Column({
+        nullable : true
+    })
     profile_image: string;
 
     @Column({
@@ -42,10 +44,13 @@ export class User {
     @Column({
         type: "enum",
         enum: Status,
+        default : "off"
     })
     status: Status;
 
-    @Column()
+    @Column({
+        nullable : true
+    })
     activation_code: string;
     
 }

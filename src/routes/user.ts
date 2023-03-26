@@ -7,6 +7,8 @@ class UserRouter {
     }
     private initialiseRoutes(): void {
         this.router.get(`/`, UsersConstoller.getUser);
+        this.router.post(`/`, UsersConstoller.createUser);
+        this.router.post(`/login`, UsersConstoller.login);
     }
 }
 const getRouter = new UserRouter()
