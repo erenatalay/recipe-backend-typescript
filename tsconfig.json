@@ -10,7 +10,6 @@
       "rootDir": "./src",
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
-
    },
    "ts-node": {
       "esm": true

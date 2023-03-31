@@ -1,20 +1,25 @@
 import { Request, Response, NextFunction } from "express";
 const UserService = require("../services/UserService");
-const { generateAccessToken, generateRefreshToken,passwordToHash } = require("../utils/helper");
+const CustomError = require("../helpers/CustomError");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+  passwordToHash,
+} = require("../utils/helper");
 class Users {
   async getUser(req: any, res: Response, next: NextFunction) {
-  try {
-    const id = req.user.id
-    const user = await UserService.find({id});
-    res.status(200).json({
+    try {
+      const id = req.user.id;
+      const user = await UserService.find({ id });
+      res.status(200).json({
         success: true,
-        data: user
-    })
-  } catch (error) {
-    res.status(500).send({
-      message: "Server Internal Error",
-    });
-  }
+        data: user,
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: "Server Internal Error",
+      });
+    }
   }
   async createUser(req: Request, res: Response, next: NextFunction) {
     try {
@@ -31,21 +36,23 @@ class Users {
         message: "Server Internal Error",
       });
     }
- 
   }
 
   async login(req: Request, res: Response, next: NextFunction) {
-    req.body.password = passwordToHash(req.body.password)
+    req.body.password = passwordToHash(req.body.password);
     try {
       const data = req.body;
       const user = await UserService.find(data);
+      if (!user) {
+        return next(new CustomError("There is no such user", 400));
+      }
       const response = {
         ...user,
         tokens: {
           access_token: generateAccessToken(user),
-          refresh_token: generateRefreshToken(user)
-      }
-      }
+          refresh_token: generateRefreshToken(user),
+        },
+      };
       res.status(200).send({
         data: response,
         message: "Successfully",
@@ -56,10 +63,7 @@ class Users {
         message: "Server Internal Error",
       });
     }
-
   }
-
 }
-
 
 module.exports = new Users();
