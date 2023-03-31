@@ -1,13 +1,12 @@
 import { Request, Response, NextFunction } from "express";
+import { User } from "../entity/User";
+import { CustomAuthRequest } from "../interface/CustomAuthRequest";
+import { CustomRequest } from "../interface/CustomRequest";
 const UserService = require("../services/UserService");
 const CustomError = require("../helpers/CustomError");
-const {
-  generateAccessToken,
-  generateRefreshToken,
-  passwordToHash,
-} = require("../utils/helper");
+const Helpers = require("../utils/helper");
 class Users {
-  async getUser(req: any, res: Response, next: NextFunction) {
+  async getUser(req: CustomAuthRequest<User>, res: Response, next: NextFunction) {
     try {
       const id = req.user.id;
       const user = await UserService.find({ id });
@@ -21,10 +20,10 @@ class Users {
       });
     }
   }
-  async createUser(req: Request, res: Response, next: NextFunction) {
+  async createUser(req:  CustomRequest<User>, res: Response, next: NextFunction) {
     try {
       const data = req.body;
-      req.body.password = passwordToHash(req.body.password);
+      req.body.password = Helpers.passwordToHash(req.body.password);
       const user = await UserService.create(data);
       res.status(200).send({
         data: user,
@@ -38,8 +37,8 @@ class Users {
     }
   }
 
-  async login(req: Request, res: Response, next: NextFunction) {
-    req.body.password = passwordToHash(req.body.password);
+  async login(req:  CustomRequest<User>, res: Response, next: NextFunction) {
+    req.body.password = Helpers.passwordToHash(req.body.password);
     try {
       const data = req.body;
       const user = await UserService.find(data);
@@ -49,8 +48,8 @@ class Users {
       const response = {
         ...user,
         tokens: {
-          access_token: generateAccessToken(user),
-          refresh_token: generateRefreshToken(user),
+          access_token: Helpers.generateAccessToken(user),
+          refresh_token: Helpers.generateRefreshToken(user),
         },
       };
       res.status(200).send({

@@ -3,8 +3,6 @@ const express = require("express");
 const config = require("./config");
 const app = express();
 const loaders = require("./loaders")
-const swaggerAutogen = require('swagger-autogen')()
-const endpointsFiles = ['./routes/user.js']
 const routers = require("./routes");
 const errorHandler = require("./middlewares/errorHandler")
 app.use(express.json());

@@ -1,11 +1,11 @@
+import { Request, Response, NextFunction, Errback } from "express";
+import { CustomError } from "../interface/CustomError";
 
-import { Request, Response, NextFunction,Errback } from "express";
-
-module.exports = (error,req : Request,res : Response,next : NextFunction) => {
-    res.status(error.status || 500);
-    res.json({
-        error : {
-            message : error.message || "Internal Server Error."
-        }
-    })
-}
+module.exports = (error : CustomError, req: Request, res: Response, next: NextFunction) => {
+  res.status(error.status || 500);
+  res.json({
+    error: {
+      message: error.message || "Internal Server Error.",
+    },
+  });
+};

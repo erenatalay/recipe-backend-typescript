@@ -1,6 +1,10 @@
+import { Request, Response, NextFunction } from "express";
+import { CustomAuthRequest } from "../interface/CustomAuthRequest";
+import { User } from "../interface/User";
 const httpStatus = require("http-status");
 const JWT = require("jsonwebtoken")
-const authenticateToken = (req,res,next) => {
+
+const authenticateToken = (req:CustomAuthRequest<User>,res:Response,next:NextFunction) => {
    const token = req.headers?.authorization?.split(" ")[1] || null
    if(token === null){
     return res.status(httpStatus.UNAUTHORIZED).send({error : "To do this, you must first login."})
