@@ -1,6 +1,8 @@
 import { Router, } from 'express';
 const UsersConstoller = require("../controller/user");
 const authenticate = require("../middlewares/authenticate");
+const validate = require("../middlewares/validate");
+const userValidation = require("../validations/user")
 class UserRouter {
     public router = Router();
     constructor() {
@@ -9,7 +11,7 @@ class UserRouter {
     private initialiseRoutes(): void {
         this.router.get(`/`, UsersConstoller.getUser);
         this.router.post(`/`, UsersConstoller.createUser);
-        this.router.post(`/login`, UsersConstoller.login);
+        this.router.post(`/login`,validate(userValidation.loginValidation()), UsersConstoller.login);
         this.router.get(`/me`,authenticate, UsersConstoller.getUser);
     }
 }
