@@ -1,3 +1,4 @@
+import { UserController } from './../interface/UserController';
 import { Request, Response, NextFunction } from "express";
 import { User } from "../entity/User";
 import { UniqueText } from "../helpers/UniqueText";
@@ -7,7 +8,7 @@ import { TypeOrmError } from "../interface/TypeORMError";
 const UserService = require("../services/UserService");
 const CustomError = require("../helpers/CustomError");
 const Helpers = require("../utils/helper");
-class Users {
+class Users implements UserController {
   async getUser(
     req: CustomAuthRequest<User>,
     res: Response,
@@ -117,7 +118,6 @@ class Users {
     try {
       const {id} = req.user;
       const user = await UserService.find({id});
-
       if (!user) {
         return next(new CustomError("There is no such user", 400));
       }
