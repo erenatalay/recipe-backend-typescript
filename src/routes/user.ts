@@ -1,4 +1,4 @@
-import { Router, } from 'express';
+import { Router } from 'express';
 const UsersConstoller = require("../controller/user");
 const authenticate = require("../middlewares/authenticate");
 const validate = require("../middlewares/validate");
@@ -9,8 +9,9 @@ class UserRouter {
         this.initialiseRoutes();
     }
     private initialiseRoutes(): void {
-        this.router.get(`/`, UsersConstoller.getUser);
-        this.router.post(`/`, UsersConstoller.createUser);
+        this.router.put(`/`,authenticate,validate(userValidation.updateValidation()) ,UsersConstoller.updateUser);
+        this.router.delete(`/`,authenticate ,UsersConstoller.deleteUser);
+        this.router.post(`/register`,validate(userValidation.createValidation()) ,UsersConstoller.createUser);
         this.router.post(`/login`,validate(userValidation.loginValidation()), UsersConstoller.login);
         this.router.get(`/me`,authenticate, UsersConstoller.getUser);
     }

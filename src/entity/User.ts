@@ -52,6 +52,7 @@ export class User {
 
     @Column({
         nullable : true,
+        select :false
     })
     activation_code: string;
     

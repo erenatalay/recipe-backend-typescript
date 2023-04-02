@@ -1,15 +1,24 @@
 import { Request, Response, NextFunction } from "express";
 import { User } from "../entity/User";
+import { UniqueText } from "../helpers/UniqueText";
 import { CustomAuthRequest } from "../interface/CustomAuthRequest";
 import { CustomRequest } from "../interface/CustomRequest";
+import { TypeOrmError } from "../interface/TypeORMError";
 const UserService = require("../services/UserService");
 const CustomError = require("../helpers/CustomError");
 const Helpers = require("../utils/helper");
 class Users {
-  async getUser(req: CustomAuthRequest<User>, res: Response, next: NextFunction) {
+  async getUser(
+    req: CustomAuthRequest<User>,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const id = req.user.id;
       const user = await UserService.find({ id });
+      if (!user) {
+        return next(new CustomError("There is no such user", 400));
+      }
       res.status(200).json({
         success: true,
         data: user,
@@ -20,7 +29,11 @@ class Users {
       });
     }
   }
-  async createUser(req:  CustomRequest<User>, res: Response, next: NextFunction) {
+  async createUser(
+    req: CustomRequest<User>,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const data = req.body;
       req.body.password = Helpers.passwordToHash(req.body.password);
@@ -30,6 +43,12 @@ class Users {
         message: "Successfully",
       });
     } catch (error) {
+      const uniqueError: TypeOrmError = error;
+      if (uniqueError?.driverError?.code === "23505") {
+        return next(
+          new CustomError(UniqueText(uniqueError.driverError.detail), 400)
+        );
+      }
       res.status(500).send({
         error: error,
         message: "Server Internal Error",
@@ -37,7 +56,7 @@ class Users {
     }
   }
 
-  async login(req:  CustomRequest<User>, res: Response, next: NextFunction) {
+  async login(req: CustomRequest<User>, res: Response, next: NextFunction) {
     req.body.password = Helpers.passwordToHash(req.body.password);
     try {
       const data = req.body;
@@ -63,6 +82,58 @@ class Users {
       });
     }
   }
+
+  async updateUser(req: CustomAuthRequest<User>, res: Response, next: NextFunction){
+    try {
+      const {id} = req.user;
+      const {firstname,lastname,gender,username,email} = req.body
+      const data = {
+        firstname,
+        lastname,
+        gender,
+        email,
+        username
+      }
+      const response = await UserService.update(data,id)
+      res.status(200).send({
+        data: response,
+        message: "Successfully",
+      });
+    } catch (error) {
+      const uniqueError: TypeOrmError = error;
+      if (uniqueError?.driverError?.code === "23505") {
+        return next(
+          new CustomError(UniqueText(uniqueError.driverError.detail), 400)
+        );
+      }
+       res.status(500).send({
+        error: error,
+        message: "Server Internal Error",
+      });
+    } 
+  }
+
+  async deleteUser(req: CustomAuthRequest<User>, res: Response, next: NextFunction){
+    try {
+      const {id} = req.user;
+      const user = await UserService.find({id});
+
+      if (!user) {
+        return next(new CustomError("There is no such user", 400));
+      }
+      await UserService.delete(id)
+      res.status(200).send({
+        message: "Successfully Delete",
+      });
+    } catch (error) {
+       res.status(500).send({
+        error: error,
+        message: "Server Internal Error",
+      });
+    } 
+  }
 }
+
+
 
 module.exports = new Users();
