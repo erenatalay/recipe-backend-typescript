@@ -1,6 +1,6 @@
 const server = require("./server");
 
 
-module.exports = () => {
+export default  () => {
     server();
 }

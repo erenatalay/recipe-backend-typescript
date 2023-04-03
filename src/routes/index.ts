@@ -1,6 +1,6 @@
 import { Router } from "express";
-const UserRouter = require("./user");
-const swaggerUi = require("swagger-ui-express");
+import UserRouter from "./user";
+import * as swaggerUi from "swagger-ui-express";
 const swaggerFile = require("../../swagger_output.json");
 class MainRouter {
   public router = Router();
@@ -13,4 +13,4 @@ class MainRouter {
   }
 }
 const getRouter = new MainRouter();
-module.exports = getRouter.router;
+export default getRouter.router;

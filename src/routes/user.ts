@@ -1,8 +1,8 @@
 import { Router } from 'express';
-const UsersConstoller = require("../controller/user");
-const authenticate = require("../middlewares/authenticate");
-const validate = require("../middlewares/validate");
-const userValidation = require("../validations/user")
+import UsersConstoller  from "../controller/user";
+import authenticate  from "../middlewares/authenticate";
+import validate  from"../middlewares/validate" ;
+import userValidation from "../validations/user"
 class UserRouter {
     public router = Router();
     constructor() {
@@ -18,4 +18,4 @@ class UserRouter {
 }
 const getRouter = new UserRouter()
 
-module.exports = getRouter.router;
+export default  getRouter.router;

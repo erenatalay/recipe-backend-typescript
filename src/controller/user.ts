@@ -1,13 +1,13 @@
-import { UserController } from './../interface/UserController';
+import { UserController } from "./../interface/UserController";
 import { Request, Response, NextFunction } from "express";
 import { User } from "../entity/User";
 import { UniqueText } from "../helpers/UniqueText";
 import { CustomAuthRequest } from "../interface/CustomAuthRequest";
 import { CustomRequest } from "../interface/CustomRequest";
 import { TypeOrmError } from "../interface/TypeORMError";
-const UserService = require("../services/UserService");
-const CustomError = require("../helpers/CustomError");
-const Helpers = require("../utils/helper");
+import UserService  from "../services/UserService";
+import CustomError  from "../helpers/CustomError";
+import Helpers from "../utils/helper";
 class Users implements UserController {
   async getUser(
     req: CustomAuthRequest<User>,
@@ -61,7 +61,7 @@ class Users implements UserController {
     req.body.password = Helpers.passwordToHash(req.body.password);
     try {
       const data = req.body;
-      const user = await UserService.find(data);
+      const user  =  await UserService.find(data) as User;
       if (!user) {
         return next(new CustomError("There is no such user", 400));
       }
@@ -84,18 +84,22 @@ class Users implements UserController {
     }
   }
 
-  async updateUser(req: CustomAuthRequest<User>, res: Response, next: NextFunction){
+  async updateUser(
+    req: CustomAuthRequest<User>,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const {id} = req.user;
-      const {firstname,lastname,gender,username,email} = req.body
+      const { id } = req.user;
+      const { firstname, lastname, gender, username, email } = req.body;
       const data = {
         firstname,
         lastname,
         gender,
         email,
-        username
-      }
-      const response = await UserService.update(data,id)
+        username,
+      };
+      const response = await UserService.update(data, id);
       res.status(200).send({
         data: response,
         message: "Successfully",
@@ -107,33 +111,35 @@ class Users implements UserController {
           new CustomError(UniqueText(uniqueError.driverError.detail), 400)
         );
       }
-       res.status(500).send({
+      res.status(500).send({
         error: error,
         message: "Server Internal Error",
       });
-    } 
+    }
   }
 
-  async deleteUser(req: CustomAuthRequest<User>, res: Response, next: NextFunction){
+  async deleteUser(
+    req: CustomAuthRequest<User>,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const {id} = req.user;
-      const user = await UserService.find({id});
+      const { id } = req.user;
+      const user = await UserService.find({ id });
       if (!user) {
         return next(new CustomError("There is no such user", 400));
       }
-      await UserService.delete(id)
+      await UserService.delete(id);
       res.status(200).send({
         message: "Successfully Delete",
       });
     } catch (error) {
-       res.status(500).send({
+      res.status(500).send({
         error: error,
         message: "Server Internal Error",
       });
-    } 
+    }
   }
 }
 
-
-
-module.exports = new Users();
+export default new Users();

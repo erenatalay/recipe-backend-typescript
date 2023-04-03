@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Errback } from "express";
 import { CustomError } from "../interface/CustomError";
 
-module.exports = (error : CustomError, req: Request, res: Response, next: NextFunction) => {
+export default  (error : CustomError, req: Request, res: Response, next: NextFunction) => {
   res.status(error.status || 500);
   res.json({
     error: {

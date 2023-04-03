@@ -1,4 +1,4 @@
-const BaseService = require("./BaseService");
+import BaseService  from "./BaseService";
 import { User } from "../entity/User";
 
 class UserService extends BaseService {
@@ -7,4 +7,4 @@ class UserService extends BaseService {
     }
 }
 
-module.exports = new UserService();
+export default new UserService();

@@ -19,4 +19,4 @@ const authenticateToken = (req:CustomAuthRequest<User>,res:Response,next:NextFun
    })
 }
 
-module.exports = authenticateToken;
+export default authenticateToken;

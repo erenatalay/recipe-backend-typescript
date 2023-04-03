@@ -1,4 +1,4 @@
-const Joi = require("joi");
+import * as Joi from "joi"
 
 class UserValidation {
   createValidation() {
@@ -29,4 +29,4 @@ class UserValidation {
   }
   
 }
-module.exports = new UserValidation();
+export default new UserValidation();

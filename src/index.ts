@@ -1,18 +1,16 @@
-
-const express = require("express");
-const config = require("./config");
+import * as express from "express";
+import config from "./config";
 const app = express();
-const loaders = require("./loaders")
-const routers = require("./routes");
-const errorHandler = require("./middlewares/errorHandler")
+import loaders from "./loaders";
+import routers from "./routes";
+import errorHandler from "./middlewares/errorHandler";
 app.use(express.json());
 
 config();
 loaders();
 
-app.use("/api",routers);
-app.listen(process.env.APP_PORT,() => {
-    console.log(`${process.env.APP_PORT} Port Server Start`);
-    app.use(errorHandler);
-    
-})
+app.use("/api", routers);
+app.listen(process.env.APP_PORT, () => {
+  console.log(`${process.env.APP_PORT} Port Server Start`);
+  app.use(errorHandler);
+});

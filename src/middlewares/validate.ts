@@ -14,4 +14,4 @@ const validate = (schema) => (req:Request, res:Response, next:NextFunction) => {
     return next();
 }
 
-module.exports = validate;
+export default validate;

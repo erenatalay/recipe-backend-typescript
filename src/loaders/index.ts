@@ -1,6 +1,5 @@
 const connetDataBase = require("../database/connection");
 
-
-module.exports = () => {
+export default  () => {
     connetDataBase.connetDataBase();
 }
