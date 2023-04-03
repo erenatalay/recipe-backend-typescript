@@ -1,4 +1,4 @@
-const connetDataBase = require("../database/connection");
+import  connetDataBase  from "../database/connection";
 
 export default  () => {
     connetDataBase.connetDataBase();

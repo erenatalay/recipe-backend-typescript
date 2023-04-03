@@ -1,5 +1,5 @@
-const dotenv = require("dotenv");
+import  * as dotenv  from "dotenv";
 
-module.exports = () => {
+export default  () => {
     dotenv.config();
 }

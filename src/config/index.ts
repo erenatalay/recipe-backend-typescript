@@ -1,6 +1,4 @@
-const server = require("./server");
-
-
-export default  () => {
+import server  from "./server";
+export default () => {
     server();
 }
