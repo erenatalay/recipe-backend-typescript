@@ -5,8 +5,8 @@ import { UniqueText } from "../helpers/UniqueText";
 import { CustomAuthRequest } from "../interface/CustomAuthRequest";
 import { CustomRequest } from "../interface/CustomRequest";
 import { TypeOrmError } from "../interface/TypeORMError";
-import UserService  from "../services/UserService";
-import CustomError  from "../helpers/CustomError";
+import UserService from "../services/UserService";
+import CustomError from "../helpers/CustomError";
 import Helpers from "../utils/helper";
 class Users implements UserController {
   async getUser(
@@ -61,7 +61,7 @@ class Users implements UserController {
     req.body.password = Helpers.passwordToHash(req.body.password);
     try {
       const data = req.body;
-      const user  =  await UserService.find(data) as User;
+      const user = (await UserService.find(data)) as User;
       if (!user) {
         return next(new CustomError("There is no such user", 400));
       }
@@ -91,6 +91,10 @@ class Users implements UserController {
   ) {
     try {
       const { id } = req.user;
+      const user = await UserService.find({ id });
+      if (!user) {
+        return next(new CustomError("There is no such user", 400));
+      }
       const { firstname, lastname, gender, username, email } = req.body;
       const data = {
         firstname,
@@ -132,6 +136,34 @@ class Users implements UserController {
       await UserService.delete(id);
       res.status(200).send({
         message: "Successfully Delete",
+      });
+    } catch (error) {
+      res.status(500).send({
+        error: error,
+        message: "Server Internal Error",
+      });
+    }
+  }
+
+  async changePassword(
+    req: CustomAuthRequest<User>,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.user;
+      const user = await UserService.find({ id });
+      if (!user) {
+        return next(new CustomError("There is no such user", 400));
+      }
+      req.body.password = Helpers.passwordToHash(req.body?.password)
+      const data = {
+        password : req.body.password
+      }
+      const response = await UserService.update(data, id);
+      res.status(200).send({
+        data: response,
+        message: "Successfully",
       });
     } catch (error) {
       res.status(500).send({
