@@ -174,10 +174,16 @@ class Users implements UserController {
     }
   }
 
-  async updateProfileImage(req, res, next) {
+  async updateProfileImage( req: any,
+    res: Response,
+    next: NextFunction) {
     if (!req?.files?.profile_image) {
       return next(new CustomError("Please select a file", 400));
     }
+    if (req?.files?.profile_image?.mimetype.split("/")[0] !== "image") {
+      return next(new CustomError("Please select just a image", 400));
+    }
+    console.log(req?.files?.profile_image)
     const extension = path.extname(req.files.profile_image.name);
     const fileName = `${req?.user?.username.toLowerCase().split(" ")[0]}${
       req?.user?.id
@@ -187,7 +193,6 @@ class Users implements UserController {
       if (err) {
         return res.status(500).send({ error: err });
       }
-
       try {
         const user = await UserService.update(
           {
