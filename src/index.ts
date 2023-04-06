@@ -1,13 +1,10 @@
 import * as express from "express";
 import config from "./config";
 const app = express();
-import loaders from "./loaders";
 import routers from "./routes";
 import errorHandler from "./middlewares/errorHandler";
 app.use(express.json());
-
 config();
-loaders();
 
 app.use("/api", routers);
 app.listen(process.env.APP_PORT, () => {

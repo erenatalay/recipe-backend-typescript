@@ -1,13 +1,13 @@
 import { UserController } from "./../interface/UserController";
 import { Request, Response, NextFunction } from "express";
 import { User } from "../entity/User";
-import { UniqueText } from "../helpers/UniqueText";
+import { UniqueText } from "../utils/UniqueText";
 import { CustomAuthRequest } from "../interface/CustomAuthRequest";
 import { CustomRequest } from "../interface/CustomRequest";
 import { TypeOrmError } from "../interface/TypeORMError";
 import UserService from "../services/UserService";
-import CustomError from "../helpers/CustomError";
-import Helpers from "../utils/helper";
+import CustomError from "../utils/CustomError";
+import Helpers from "../utils/Helper";
 class Users implements UserController {
   async getUser(
     req: CustomAuthRequest<User>,
