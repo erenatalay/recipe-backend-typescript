@@ -8,6 +8,7 @@ import { TypeOrmError } from "../interface/TypeORMError";
 import UserService from "../services/UserService";
 import CustomError from "../utils/CustomError";
 import Helpers from "../utils/Helper";
+import * as path from "path";
 class Users implements UserController {
   async getUser(
     req: CustomAuthRequest<User>,
@@ -156,10 +157,10 @@ class Users implements UserController {
       if (!user) {
         return next(new CustomError("There is no such user", 400));
       }
-      req.body.password = Helpers.passwordToHash(req.body?.password)
+      req.body.password = Helpers.passwordToHash(req.body?.password);
       const data = {
-        password : req.body.password
-      }
+        password: req.body.password,
+      };
       const response = await UserService.update(data, id);
       res.status(200).send({
         data: response,
@@ -171,6 +172,36 @@ class Users implements UserController {
         message: "Server Internal Error",
       });
     }
+  }
+
+  async updateProfileImage(req, res, next) {
+    if (!req?.files?.profile_image) {
+      return next(new CustomError("Please select a file", 400));
+    }
+    const extension = path.extname(req.files.profile_image.name);
+    const fileName = `${req?.user?.username.toLowerCase().split(" ")[0]}${
+      req?.user?.id
+    }${extension}`;
+    const folderPath = path.join(__dirname, "../", "uploads/users", fileName);
+    req.files?.profile_image.mv(folderPath, async (err) => {
+      if (err) {
+        return res.status(500).send({ error: err });
+      }
+
+      try {
+        const user = await UserService.update(
+          {
+            profile_image: `${process.env.BASE_URL_LOCAL}uploads/users/${fileName}`,
+          },
+          req.user.id
+        );
+        res.status(200).send(user);
+      } catch (error) {
+        res.status(500).send({
+          error: "Upload  başarılı fakat kayıt sırasında bir problem oluştu.",
+        });
+      }
+    });
   }
 }
 

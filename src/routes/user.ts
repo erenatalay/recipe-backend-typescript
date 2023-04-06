@@ -15,6 +15,7 @@ class UserRouter {
         this.router.post(`/login`,validate(userValidation.loginValidation()), UsersConstoller.login);
         this.router.get(`/me`,authenticate, UsersConstoller.getUser);
         this.router.put(`/change-password`, validate(userValidation.changePasswordValidation()),authenticate, UsersConstoller.changePassword);
+        this.router.put(`/update-profile-image`,authenticate, UsersConstoller.updateProfileImage);
     }
 }
 const getRouter = new UserRouter()

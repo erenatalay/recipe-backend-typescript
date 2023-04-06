@@ -9,4 +9,6 @@ export interface UserController {
     updateUser : (req: CustomAuthRequest<User>,res: Response,next: NextFunction) => void
     deleteUser : (req: CustomAuthRequest<User>,res: Response,next: NextFunction) => void
     changePassword : (req: CustomAuthRequest<User>,res: Response,next: NextFunction) => void
+    updateProfileImage : (req: CustomAuthRequest<User>,res: Response,next: NextFunction) => void
+    
 }
