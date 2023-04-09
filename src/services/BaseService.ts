@@ -5,7 +5,7 @@ class BaseService {
   constructor(model) {
     this.BaseModel = model;
   }
-  async list(where) {
+  async list(where? :  Object) {
     if (where) {
       return getRepository(this.BaseModel).find({
         where,
@@ -13,19 +13,19 @@ class BaseService {
     }
     return getRepository(this.BaseModel).find({});
   }
-  async create(data) {
+  async create(data : Object) {
     const model = getRepository(this.BaseModel);
     const createData = model.create(data);
     return model.save(createData);
   }
-  async find(data) {
+  async find(data : Object) {
     return getRepository(this.BaseModel).findOne({ where: data });
   }
-  async update(data, id: number) {
+  async update(data : Object, id: number) {
     let model : any = await  this.find({ id });
     return getRepository(this.BaseModel).save({ ...model, ...data });
   }
-  async delete(id) {
+  async delete(id : number) {
     return getRepository(this.BaseModel).delete({id });
   }
 }

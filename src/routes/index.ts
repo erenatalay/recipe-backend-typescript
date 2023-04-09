@@ -1,5 +1,6 @@
 import { Router } from "express";
 import UserRouter from "./user";
+import CategoryRouter from "./category";
 import * as swaggerUi from "swagger-ui-express";
 const swaggerFile = require("../../swagger_output.json");
 class MainRouter {
@@ -9,6 +10,7 @@ class MainRouter {
   }
   private initialiseRoutes(): void {
     this.router.use(`/user`, UserRouter);
+    this.router.use(`/category`, CategoryRouter);
     this.router.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
   }
 }

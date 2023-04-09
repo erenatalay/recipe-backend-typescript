@@ -1,7 +1,7 @@
-import { CustomRequest } from './CustomRequest';
+import { CustomRequest } from '../request/CustomRequest';
 import { Request, Response, NextFunction } from "express";
-import { CustomAuthRequest } from "./CustomAuthRequest";
-import { User } from "./User";
+import { CustomAuthRequest } from "../request/CustomAuthRequest";
+import { User } from "../model/User";
 export interface UserController {
     getUser : (req: CustomAuthRequest<User>,res: Response,next: NextFunction) => void
     createUser : (req: CustomRequest<User>,res: Response,next: NextFunction) => void

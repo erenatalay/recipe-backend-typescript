@@ -1,10 +1,10 @@
-import { UserController } from "./../interface/UserController";
+import { UserController } from "../interface/controller/UserController";
 import { Request, Response, NextFunction } from "express";
 import { User } from "../entity/User";
 import { UniqueText } from "../utils/UniqueText";
-import { CustomAuthRequest } from "../interface/CustomAuthRequest";
-import { CustomRequest } from "../interface/CustomRequest";
-import { TypeOrmError } from "../interface/TypeORMError";
+import { CustomAuthRequest } from "../interface/request/CustomAuthRequest";
+import { CustomRequest } from "../interface/request/CustomRequest";
+import { TypeOrmError } from "../interface/error/TypeORMError";
 import UserService from "../services/UserService";
 import CustomError from "../utils/CustomError";
 import Helpers from "../utils/Helper";
