@@ -3,9 +3,16 @@ import { CustomAuthRequest } from "../interface/request/CustomAuthRequest";
 import { CategoryController } from "../interface/controller/CategoryController";
 import CategoryService from "../services/CategoryService";
 import { Category } from "../interface/model/Category";
+import { TypeOrmError } from "../interface/error/TypeORMError";
+import CustomError from "../utils/CustomError";
+import { UniqueText } from "../utils/UniqueText";
 
-class Categories  {
-  async getCategory(req: CustomAuthRequest<Category>,res: Response,next: NextFunction) {
+class Categories {
+  async getCategory(
+    req: CustomAuthRequest<Category>,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const category = await CategoryService.list();
       res.status(200).json({
@@ -13,6 +20,30 @@ class Categories  {
         data: category,
       });
     } catch (error) {
+      res.status(500).send({
+        message: "Server Internal Error",
+      });
+    }
+  }
+  async createCategory(
+    req: CustomAuthRequest<Category>,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { name } = req.body;
+    try {
+      const category = await CategoryService.create({ name });
+      res.status(200).json({
+        success: true,
+        data: category,
+      });
+    } catch (error) {
+      const uniqueError: TypeOrmError = error;
+      if (uniqueError?.driverError?.code === "23505") {
+        return next(
+          new CustomError(UniqueText(uniqueError.driverError.detail), 400)
+        );
+      }
       res.status(500).send({
         message: "Server Internal Error",
       });
