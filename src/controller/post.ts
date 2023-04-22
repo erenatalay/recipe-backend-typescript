@@ -8,12 +8,13 @@ import PostService from "../services/PostService";
 class Posts {
   async getPosts(req: any, res: Response, next: NextFunction) {
     try {
-      const post = await PostService.list();
+      const post = await PostService.list({},["user","category"]);
       res.status(200).json({
         success: true,
         data: post,
       });
     } catch (error) {
+      console.log(error)
       res.status(500).send({
         message: "Server Internal Error",
       });

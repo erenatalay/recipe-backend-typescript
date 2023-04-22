@@ -1,4 +1,5 @@
-import {Entity, PrimaryGeneratedColumn,Column} from "typeorm";
+import {Entity, PrimaryGeneratedColumn,Column,ManyToOne} from "typeorm";
+import { Post } from "./Posts"
 
 @Entity()
 export class Category {
@@ -7,4 +8,7 @@ export class Category {
 
     @Column({ unique: true })
     name: string;
+
+    @ManyToOne(() => Post, post => post.categoryId)
+    post: Post;
 }

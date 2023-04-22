@@ -5,17 +5,24 @@ class BaseService {
   constructor(model) {
     this.BaseModel = model;
   }
-  async list(where?: Object, relations?: Object) {
+  async list(where?: Object, relations?: Array<any>) {
     if (where) {
+      if (relations) {
+        return getRepository(this.BaseModel).find({
+          where,
+          relations,
+        });
+      }
       return getRepository(this.BaseModel).find({
         where,
+      });
+    }
+    if (relations) {
+      return getRepository(this.BaseModel).find({
         relations,
       });
     }
-
-    return getRepository(this.BaseModel).find({
-    relations  : ["user","category"]
-    });
+    return getRepository(this.BaseModel).find({});
   }
   async create(data: Object) {
     const model = getRepository(this.BaseModel);
