@@ -8,7 +8,7 @@ import PostService from "../services/PostService";
 class Posts {
   async getPosts(req: any, res: Response, next: NextFunction) {
     try {
-      const post = await PostService.list({},["user","category"]);
+      const post = await PostService.list({},["user","categories","photos"]);
       res.status(200).json({
         success: true,
         data: post,
