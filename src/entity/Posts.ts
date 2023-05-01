@@ -6,19 +6,17 @@ import { PostPhoto } from "./PostPhoto";
 export class Post {
     @PrimaryGeneratedColumn()
     id: number;
-
     @Column()
     name: string;
-    @Column({ type: "int", nullable: true })
-    userId: number;
+    @Column({nullable : true})
+    description: string;
+    @Column({nullable : true})
+    video: string;
     @ManyToOne(() => User)
-    @JoinColumn({ name: "userId" })
     user: User;
-    @Column({ type: "int", nullable: true })
-    categoryId: number;
-    @ManyToMany(() => Category, category => category.posts)
+    @ManyToMany(() => Category, category => category.posts,{ cascade: true })
     @JoinTable()
     categories: Category[];
-    @OneToMany(() => PostPhoto, photo => photo.post)
+    @OneToMany(() => PostPhoto, photo => photo.post,{ cascade: true })
     photos: PostPhoto[];
 }

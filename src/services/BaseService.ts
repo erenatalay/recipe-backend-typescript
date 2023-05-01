@@ -26,8 +26,7 @@ class BaseService {
   }
   async create(data: Object) {
     const model = getRepository(this.BaseModel);
-    const createData = model.create(data);
-    return model.save(createData);
+    return model.save(data);
   }
   async find(data: Object) {
     return getRepository(this.BaseModel).findOne({ where: data });
