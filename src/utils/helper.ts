@@ -3,7 +3,7 @@ import * as CryptoJS from 'crypto-js'
 import { User } from '../entity/User';
 class Helpers {
      generateAccessToken (user : User)  {
-        return JWT.sign({ name: user.email, ...user },process.env.ACCESS_TOKEN_SECRET_KEY,{expiresIn : "1w"})
+        return JWT.sign({ name: user.email, ...user },process.env.ACCESS_TOKEN_SECRET_KEY,{expiresIn : "365d"})
     }
      generateRefreshToken (user : User) {
         return JWT.sign({ name: user.email, ...user },process.env.REFRESH_TOKEN_SECRET_KEY) 

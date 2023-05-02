@@ -11,8 +11,8 @@ class PostRouter {
         this.router.get(`/`,authenticate, PostController.getPosts);
         // this.router.get(`/:id`,authenticate,idChecker(), CategoryController.findCategory);
         this.router.post(`/`,authenticate, PostController.createPost);
-        // this.router.put(`/:id`,authenticate,idChecker(),validate(CategoryValidation.createValidation()), CategoryController.updateCategory);
-        // this.router.delete(`/:id`,authenticate,idChecker(), CategoryController.deleteCategory);
+        this.router.put(`/:id`,authenticate, PostController.updatePost);
+        this.router.delete(`/:id`,authenticate, PostController.deletePost);
     }
 }
 const getRouter = new PostRouter()
