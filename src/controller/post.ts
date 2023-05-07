@@ -117,6 +117,29 @@ class Posts {
       });
     }
   }
+
+  async findPost(
+    req: CustomAuthRequest<Post>,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { id } = req.params as unknown as Post;
+    const postFind = await PostService.find({ id},["user", "categories", "photos"]);
+    if (!postFind) {
+      return next(new CustomError("There is no such post.", 400));
+    }
+    try {
+      res.status(200).json({
+        success: true,
+        message: "Successfuly delete.",
+        data: postFind,
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: "Server Internal Error",
+      });
+    }
+  }
 }
 
 export default new Posts();

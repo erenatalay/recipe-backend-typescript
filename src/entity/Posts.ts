@@ -14,9 +14,9 @@ export class Post {
     video: string;
     @ManyToOne(() => User)
     user: User;
-    @ManyToMany(() => Category, category => category.posts,{ cascade: true })
+    @ManyToMany(() => Category, category => category.posts)
     @JoinTable()
     categories: Category[];
-    @OneToMany(() => PostPhoto, photo => photo.post,{ cascade: true })
+    @OneToMany(() => PostPhoto, photo => photo.post,{ cascade: ["remove","update"]  })
     photos: PostPhoto[];
 }

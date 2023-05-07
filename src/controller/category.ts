@@ -117,10 +117,8 @@ class Categories {
       return next(new CustomError("There is no such thing.", 400));
     }
     try {
-      const category = await CategoryService.delete(id);
-      if (!category) {
-        return next(new CustomError("There is no such thing.", 400));
-      }
+      await CategoryService.delete(id);
+
       res.status(200).json({
         success: true,
         message: "Successfuly delete.",

@@ -28,8 +28,16 @@ class BaseService {
     const model = getRepository(this.BaseModel);
     return model.save(data);
   }
-  async find(data: Object) {
-    return getRepository(this.BaseModel).findOne({ where: data });
+  async find(data: Object, relations?: Array<any>) {
+    if (relations) {
+      return getRepository(this.BaseModel).findOne({
+        where: data,
+        relations,
+      });
+    }
+    return getRepository(this.BaseModel).findOne({
+      where: data,
+    });
   }
   async update(data: Object, id: number) {
     let model: any = await this.find({ id });

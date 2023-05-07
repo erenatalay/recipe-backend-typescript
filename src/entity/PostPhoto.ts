@@ -8,6 +8,6 @@ export class PostPhoto {
     id: number;
     @Column()
     image: string;
-    @ManyToOne(() => Post, post => post.photos)
+    @ManyToOne(() => Post, post => post.photos,{onDelete : "CASCADE",onUpdate : "CASCADE"})
     post: Post;
 }
