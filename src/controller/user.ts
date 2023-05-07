@@ -183,7 +183,6 @@ class Users implements UserController {
     if (req?.files?.profile_image?.mimetype.split("/")[0] !== "image") {
       return next(new CustomError("Please select just a image", 400));
     }
-    console.log(req?.files?.profile_image)
     const extension = path.extname(req.files.profile_image.name);
     const fileName = `${req?.user?.username.toLowerCase().split(" ")[0]}${
       req?.user?.id

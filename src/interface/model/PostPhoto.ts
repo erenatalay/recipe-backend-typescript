@@ -1,4 +1,8 @@
+import { Post } from "./Post";
+
 export interface PostPhoto {
     id : number;
-    name : string
+    image : string
+    postId : number
+    post : Post[]
 }
