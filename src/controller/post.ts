@@ -6,8 +6,11 @@ import { In } from "typeorm";
 import CustomError from "../utils/CustomError";
 import { CustomAuthRequest } from "../interface/request/CustomAuthRequest";
 import { Post } from "../interface/model/Post";
-
+import { Get,Route,Tags } from "tsoa";
+@Route("posts")
+@Tags("Posts")
 class Posts {
+  @Get("/")
   async getPosts(
     req: CustomAuthRequest<Post>,
     res: Response,
