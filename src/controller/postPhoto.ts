@@ -8,6 +8,7 @@ import { CustomAuthRequest } from "../interface/request/CustomAuthRequest";
 import { PostPhoto } from "../interface/model/PostPhoto";
 import * as path from "path";
 import { v4 as uuidv4 } from "uuid";
+import * as fs from "fs"
 class PostPhotos {
   async getPostPhotos(req:  CustomAuthRequest<PostPhoto>, res: Response, next: NextFunction) {
     const { postId } = req.params as unknown as PostPhoto;
@@ -81,9 +82,15 @@ class PostPhotos {
     if (req?.files?.images?.mimetype.split("/")[0] !== "image") {
       return next(new CustomError("Please select just a image", 400));
     }
+    const currentPhoto =  `${postPhoto.image.replace(`${process.env.BASE_URL_LOCAL}uploads/posts/`,"")}`;
+    const currentFolderPath = path.join(__dirname, "../", "uploads/posts", currentPhoto);
+    fs.unlink(currentFolderPath, async () => {
+
+    });
     const extension = path.extname(req.files.images.name);
-    const fileName =  `${postPhoto.image.replace(`${process.env.BASE_URL_LOCAL}uploads/posts/`,"").split(".")[0]}${extension}`;
-    const folderPath = path.join(__dirname, "../", "uploads/users", fileName);
+    const fileName =  `${uuidv4()}${extension}`;
+    const folderPath = path.join(__dirname, "../", "uploads/posts", fileName);
+    
     req.files?.images.mv(folderPath, async (err) => {
       if (err) {
         return res.status(500).send({ error: err });
@@ -102,6 +109,27 @@ class PostPhotos {
   });
 
   }
+
+  async deletePostPhotos(req: any, res: Response, next: NextFunction) {
+    const { id } = req.params as unknown as PostPhoto;
+    const postPhoto  = await PostPhotoService.find({id}) as PostPhoto;
+    const fileName =  `${postPhoto.image.replace(`${process.env.BASE_URL_LOCAL}uploads/posts/`,"")}`;
+    const folderPath = path.join(__dirname, "../", "uploads/posts", fileName);
+    fs.unlink(folderPath, async () => {
+    try {
+       await PostPhotoService.delete(id);
+      res.status(200).send({
+        success : true,
+        message : "Successfully delete photo"
+      });
+    } catch (error) {
+      res.status(500).send({
+        error: "Upload Error",
+      });
+    }
+  });
+  }
+  
 }
 
 export default new PostPhotos();

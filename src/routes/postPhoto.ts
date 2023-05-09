@@ -14,7 +14,7 @@ class PostPhotosRouter {
         this.router.get(`/:postId`,authenticate, PostPhotosController.getPostPhotos);
         this.router.post(`/`,authenticate,PostPhotosController.createPostPhotos);
         this.router.put(`/:id`,authenticate,idChecker(), PostPhotosController.updatePostPhotos);
-        // this.router.delete(`/:id`,authenticate,idChecker(), PostPhotosController.deletePost);
+        this.router.delete(`/:id`,authenticate,idChecker(), PostPhotosController.deletePostPhotos);
     }
 }
 const getRouter = new PostPhotosRouter()
