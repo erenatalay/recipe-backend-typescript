@@ -75,7 +75,9 @@ class PostPhotos {
   async updatePostPhotos(req: any, res: Response, next: NextFunction) {
     const { id } = req.params as unknown as PostPhoto;
     const postPhoto  = await PostPhotoService.find({id}) as PostPhoto;
-
+    if (req?.files?.images?.length > 1) {
+      return next(new CustomError("Up to 1 photos can be uploaded", 400));
+    }
     if (!req?.files?.images) {
       return next(new CustomError("Please select a file", 400));
     }

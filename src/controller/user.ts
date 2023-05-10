@@ -177,6 +177,9 @@ class Users implements UserController {
   async updateProfileImage( req: any,
     res: Response,
     next: NextFunction) {
+      if (req?.files?.profile_image?.length > 1) {
+        return next(new CustomError("Up to 1 photos can be uploaded", 400));
+      }
     if (!req?.files?.profile_image) {
       return next(new CustomError("Please select a file", 400));
     }
