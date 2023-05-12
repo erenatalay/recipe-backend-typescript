@@ -2,6 +2,7 @@ import {Entity, PrimaryGeneratedColumn,Column, ManyToOne, OneToMany, JoinColumn,
 import { User } from "./User"
 import { Category } from "./Category"
 import { PostPhoto } from "./PostPhoto";
+import { WishList } from "./WishList";
 @Entity()
 export class Post {
     @PrimaryGeneratedColumn()
@@ -19,4 +20,6 @@ export class Post {
     categories: Category[];
     @OneToMany(() => PostPhoto, photo => photo.post,{ cascade: ["remove","update"]  })
     photos: PostPhoto[];
+    @OneToMany(() => PostPhoto, photo => photo.post,{ cascade: ["remove","update"]  })
+    wishList: WishList[];
 }
