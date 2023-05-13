@@ -2,21 +2,19 @@ export const options = {
   swaggerDefinition: {
     info: {
       description:
-        "This is a server with enabled Swagger documentation feature", // API uygulamasının açıklaması
-      title: "Simple Server", // Swagger arayüzünün başlıkları
-      version: "1.0.0", // Swagger'ın API'ın hangi sürümü için üretildiği
+        "This is a server with enabled Swagger documentation feature",
+      title: "Simple Server", 
+      version: "1.0.0",
     },
-    host: "localhost:3000", // API uygulamanızın host name'i yani endpointi
-    swagger: "2.0", //  or openapi:'3.0.0' // Burada swagger veya openapi için tanımlamaları görüldüğü şekilde yapabilirsiniz
-    basePath: "/api", // giriş path'i olarak eklenebilir
+    host: "localhost:3000", 
+    swagger: "2.0",
+    basePath: "/api",
     produces: [
-      // API uygulamasının Üretebileceği veri tipleri
       "application/json",
       "application/xml",
     ],
-    schemes: ["http", "https"], // API için kullanılabilecek protocol tipleri belirtilebilir
+    schemes: ["http", "https"], 
     securityDefinitions: {
-      // Güvenlik için tanımlanabilecek tipler
       JWT: {
         type: "apiKey",
         in: "header",
@@ -25,6 +23,6 @@ export const options = {
       },
     },
   },
-  basedir: __dirname, //Swagger üretimi için temel alınacak dosyaların hepsi - Routelarınızın bulunduğu klasör olarak ayarlamalısınız
-  files: ["../controller/**/*.ts"], //Swagger üretimi
+  basedir: __dirname,
+  files: ["../controller/**/*.ts"], 
 };

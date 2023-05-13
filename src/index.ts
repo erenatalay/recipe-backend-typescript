@@ -7,21 +7,13 @@ import helmet from "helmet";
 import * as fileUpload from "express-fileupload";
 import * as path from "path";
 import * as swaggerUi from "swagger-ui-express";
-
+const swaggerDocument = require('../swagger_output.json')
 app.use(express.json());
 config();
 app.use("/uploads",express.static(path.join(__dirname,"./","uploads")));
 app.use(helmet());
 app.use(fileUpload());
-app.use(
-  "/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(undefined, {
-    swaggerOptions: {
-      url: "/swagger.json",
-    },
-  })
-);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)); 
 
 app.use("/api", routers);
 app.listen(process.env.APP_PORT, () => {
