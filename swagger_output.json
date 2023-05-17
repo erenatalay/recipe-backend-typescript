@@ -195,7 +195,9 @@
           {
             "in": "formData",
             "name": "profile_image",
-            "type": "file"
+            "type": "file",
+            "allowMultiple": true,
+            "required" : true
           }
         ],
         "responses": {
@@ -260,7 +262,7 @@
               "type": "object",
               "properties": {
                 "name": {
-                  "example": "any"
+                  "example": "string"
                 }
               }
             }
@@ -328,7 +330,7 @@
               "type": "object",
               "properties": {
                 "name": {
-                  "example": "any"
+                  "example": "string"
                 }
               }
             }
@@ -418,13 +420,13 @@
               "type": "object",
               "properties": {
                 "name": {
-                  "example": "any"
+                  "example": "string"
                 },
-                "categoryId": {
-                  "example": "any"
+                "categories": {
+                  "example": ["id number"]
                 },
-                "photoId": {
-                  "example": "any"
+                "photos": {
+                  "example": ["id number"]
                 }
               }
             }
@@ -493,13 +495,13 @@
               "type": "object",
               "properties": {
                 "name": {
-                  "example": "any"
+                  "example": "string"
                 },
-                "categoryId": {
-                  "example": "any"
+                "categories": {
+                  "example": ["id number"]
                 },
-                "photoId": {
-                  "example": "any"
+                "photos": {
+                  "example": ["id number"]
                 }
               }
             }
