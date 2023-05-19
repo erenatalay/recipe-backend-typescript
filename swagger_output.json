@@ -196,8 +196,7 @@
             "in": "formData",
             "name": "profile_image",
             "type": "file",
-            "allowMultiple": true,
-            "required" : true
+            "required": true
           }
         ],
         "responses": {
@@ -423,10 +422,14 @@
                   "example": "string"
                 },
                 "categories": {
-                  "example": ["id number"]
+                  "example": [
+                    "id number"
+                  ]
                 },
                 "photos": {
-                  "example": ["id number"]
+                  "example": [
+                    "id number"
+                  ]
                 }
               }
             }
@@ -442,7 +445,6 @@
         }
       }
     },
-  
     "/post/{id}": {
       "get": {
         "description": "",
@@ -498,10 +500,14 @@
                   "example": "string"
                 },
                 "categories": {
-                  "example": ["id number"]
+                  "example": [
+                    "id number"
+                  ]
                 },
                 "photos": {
-                  "example": ["id number"]
+                  "example": [
+                    "id number"
+                  ]
                 }
               }
             }
@@ -584,7 +590,14 @@
             "bearerAuth": []
           }
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "images",
+            "type": "file",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -612,6 +625,12 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "images",
+            "type": "file",
+            "required": true
           }
         ],
         "responses": {

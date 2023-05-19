@@ -20,6 +20,6 @@ export class Post {
     categories: Category[];
     @OneToMany(() => PostPhoto, photo => photo.post,{ cascade: ["remove","update"]  })
     photos: PostPhoto[];
-    @OneToMany(() => PostPhoto, photo => photo.post,{ cascade: ["remove","update"]  })
+    @ManyToOne(() => PostPhoto, photo => photo.post,{ cascade: ["remove","update"]  })
     wishList: WishList[];
 }
