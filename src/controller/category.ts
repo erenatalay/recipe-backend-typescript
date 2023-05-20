@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomAuthRequest } from "../interface/request/CustomAuthRequest";
-import { CategoryController } from "../interface/controller/CategoryController";
 import CategoryService from "../services/CategoryService";
 import { Category } from "../interface/model/Category";
 import { TypeOrmError } from "../interface/error/TypeORMError";

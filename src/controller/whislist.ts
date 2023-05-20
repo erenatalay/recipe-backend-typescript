@@ -1,15 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import PostPhotoService from "../services/PostPhotoService";
-import { In } from "typeorm";
 import { CustomAuthRequest } from "../interface/request/CustomAuthRequest";
-import { Post } from "../interface/model/Post";
 import WishService from "../services/WishService";
 import PostService from "../services/PostService";
 import CustomError from "../utils/CustomError";
+import { WishList } from "../interface/model/Wishlist";
 
 class WhisList {
   async getWhislist(
-    req: CustomAuthRequest<any>,
+    req: CustomAuthRequest<WishList>,
     res: Response,
     next: NextFunction
   ) {
@@ -32,8 +30,37 @@ class WhisList {
     }
   }
 
+  async findWhislist(
+    req: CustomAuthRequest<WishList>,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { id } = req.params as unknown as WishList;
+
+    try {
+      const wishList = await WishService.find({id}, [
+        "user",
+        "post",
+        "post.categories",
+        "post.photos",
+      ]);
+      if (!wishList) {
+        return next(new CustomError("There is no such wishlist.", 400));
+      }
+      res.status(200).json({
+        success: true,
+        data: wishList,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        message: "Server Internal Error",
+      });
+    }
+  }
+
   async createWhislist(
-    req: CustomAuthRequest<any>,
+    req: CustomAuthRequest<WishList>,
     res: Response,
     next: NextFunction
   ) {
@@ -64,14 +91,14 @@ class WhisList {
   }
 
   async deleteWhislist(
-    req: CustomAuthRequest<any>,
+    req: CustomAuthRequest<WishList>,
     res: Response,
     next: NextFunction
   ) {
-    const { id } = req.params as any;
+    const { id } = req.params as unknown as WishList;
     try {
-      const post = await WishService.find({ id });
-      if (!post) {
+      const wishList = await WishService.find({ id });
+      if (!wishList) {
         return next(new CustomError("There is no such wishlist.", 400));
       }
       await WishService.delete(id);

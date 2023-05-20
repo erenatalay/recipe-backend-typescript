@@ -1,4 +1,3 @@
-import { UserController } from "../interface/controller/UserController";
 import { Request, Response, NextFunction } from "express";
 import { User } from "../entity/User";
 import { UniqueText } from "../utils/UniqueText";
@@ -9,7 +8,7 @@ import UserService from "../services/UserService";
 import CustomError from "../utils/CustomError";
 import Helpers from "../utils/Helper";
 import * as path from "path";
-class Users implements UserController {
+class Users  {
   async getUser(
     req: CustomAuthRequest<User>,
     res: Response,
