@@ -8,14 +8,14 @@ class UserValidation {
       username: Joi.string().required().min(4),
       password: Joi.string().required().min(8),
       confirm_password: Joi.string().valid(Joi.ref("password")).required().messages({'any.only': `The two passwords are not compatible`}),
-      email: Joi.string().email().required().min(8).email(),
+      email: Joi.string().email().required(),
       gender: Joi.string().required(),
     });
   }
   loginValidation() {
     return Joi.object({
       password: Joi.string().required().min(8),
-      email: Joi.string().email().required().min(8).email(),
+      email: Joi.string().email().required(),
     });
   }
   updateValidation(){
@@ -23,7 +23,7 @@ class UserValidation {
       firstname: Joi.string().required().min(3),
       lastname: Joi.string().required().min(3),
       username: Joi.string().required().min(4),
-      email: Joi.string().email().required().min(8).email(),
+      email: Joi.string().email().required(),
       gender: Joi.string().required(),
     });
   }

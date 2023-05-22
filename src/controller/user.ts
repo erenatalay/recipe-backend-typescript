@@ -1,20 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import { User } from "../entity/User";
-import { UniqueText } from "../utils/UniqueText";
 import { CustomAuthRequest } from "../interface/request/CustomAuthRequest";
 import { CustomRequest } from "../interface/request/CustomRequest";
-import { TypeOrmError } from "../interface/error/TypeORMError";
 import UserService from "../services/UserService";
 import CustomError from "../utils/CustomError";
 import Helpers from "../utils/Helper";
+import * as asyncErrorWrapper from "express-async-handler";
 import * as path from "path";
-class Users  {
-  async getUser(
-    req: CustomAuthRequest<User>,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
+class Users {
+  getUser = asyncErrorWrapper(
+    async (req: CustomAuthRequest<User>, res: Response, next: NextFunction) => {
       const id = req.user.id;
       const user = await UserService.find({ id });
       if (!user) {
@@ -24,18 +19,11 @@ class Users  {
         success: true,
         data: user,
       });
-    } catch (error) {
-      res.status(500).send({
-        message: "Server Internal Error",
-      });
     }
-  }
-  async createUser(
-    req: CustomRequest<User>,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
+  );
+
+  createUser = asyncErrorWrapper(
+    async (req: CustomRequest<User>, res: Response, next: NextFunction) => {
       const data = req.body;
       req.body.password = Helpers.passwordToHash(req.body.password);
       const user = await UserService.create(data);
@@ -43,23 +31,12 @@ class Users  {
         data: user,
         message: "Successfully",
       });
-    } catch (error) {
-      const uniqueError: TypeOrmError = error;
-      if (uniqueError?.driverError?.code === "23505") {
-        return next(
-          new CustomError(UniqueText(uniqueError.driverError.detail), 400)
-        );
-      }
-      res.status(500).send({
-        error: error,
-        message: "Server Internal Error",
-      });
     }
-  }
+  );
 
-  async login(req: CustomRequest<User>, res: Response, next: NextFunction) {
-    req.body.password = Helpers.passwordToHash(req.body.password);
-    try {
+  login = asyncErrorWrapper(
+    async (req: CustomRequest<User>, res: Response, next: NextFunction) => {
+      req.body.password = Helpers.passwordToHash(req.body.password);
       const data = req.body;
       const user = (await UserService.find(data)) as User;
       if (!user) {
@@ -76,20 +53,11 @@ class Users  {
         data: response,
         message: "Successfully",
       });
-    } catch (error) {
-      res.status(500).send({
-        error: error,
-        message: "Server Internal Error",
-      });
     }
-  }
+  );
 
-  async updateUser(
-    req: CustomAuthRequest<User>,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
+  updateUser = asyncErrorWrapper(
+    async (req: CustomAuthRequest<User>, res: Response, next: NextFunction) => {
       const { id } = req.user;
       const user = await UserService.find({ id });
       if (!user) {
@@ -108,26 +76,11 @@ class Users  {
         data: response,
         message: "Successfully",
       });
-    } catch (error) {
-      const uniqueError: TypeOrmError = error;
-      if (uniqueError?.driverError?.code === "23505") {
-        return next(
-          new CustomError(UniqueText(uniqueError.driverError.detail), 400)
-        );
-      }
-      res.status(500).send({
-        error: error,
-        message: "Server Internal Error",
-      });
     }
-  }
+  );
 
-  async deleteUser(
-    req: CustomAuthRequest<User>,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
+  deleteUser = asyncErrorWrapper(
+    async (req: CustomAuthRequest<User>, res: Response, next: NextFunction) => {
       const { id } = req.user;
       const user = await UserService.find({ id });
       if (!user) {
@@ -137,20 +90,11 @@ class Users  {
       res.status(200).send({
         message: "Successfully Delete",
       });
-    } catch (error) {
-      res.status(500).send({
-        error: error,
-        message: "Server Internal Error",
-      });
     }
-  }
+  );
 
-  async changePassword(
-    req: CustomAuthRequest<User>,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
+  changePassword = asyncErrorWrapper(
+    async (req: CustomAuthRequest<User>, res: Response, next: NextFunction) => {
       const { id } = req.user;
       const user = await UserService.find({ id });
       if (!user) {
@@ -165,36 +109,29 @@ class Users  {
         data: response,
         message: "Successfully",
       });
-    } catch (error) {
-      res.status(500).send({
-        error: error,
-        message: "Server Internal Error",
-      });
     }
-  }
+  );
 
-  async updateProfileImage( req: any,
-    res: Response,
-    next: NextFunction) {
+  updateProfileImage = asyncErrorWrapper(
+    async (req: any, res: Response, next: NextFunction) => {
       if (req?.files?.profile_image?.length > 1) {
         return next(new CustomError("Up to 1 photos can be uploaded", 400));
       }
-    if (!req?.files?.profile_image) {
-      return next(new CustomError("Please select a file", 400));
-    }
-    if (req?.files?.profile_image?.mimetype.split("/")[0] !== "image") {
-      return next(new CustomError("Please select just a image", 400));
-    }
-    const extension = path.extname(req.files.profile_image.name);
-    const fileName = `${req?.user?.username.toLowerCase().split(" ")[0]}${
-      req?.user?.id
-    }${extension}`;
-    const folderPath = path.join(__dirname, "../", "uploads/users", fileName);
-    req.files?.profile_image.mv(folderPath, async (err) => {
-      if (err) {
-        return res.status(500).send({ error: err });
+      if (!req?.files?.profile_image) {
+        return next(new CustomError("Please select a file", 400));
       }
-      try {
+      if (req?.files?.profile_image?.mimetype.split("/")[0] !== "image") {
+        return next(new CustomError("Please select just a image", 400));
+      }
+      const extension = path.extname(req.files.profile_image.name);
+      const fileName = `${req?.user?.username.toLowerCase().split(" ")[0]}${
+        req?.user?.id
+      }${extension}`;
+      const folderPath = path.join(__dirname, "../", "uploads/users", fileName);
+      req.files?.profile_image.mv(folderPath, async (err) => {
+        if (err) {
+          return res.status(500).send({ error: err });
+        }
         const user = await UserService.update(
           {
             profile_image: `${process.env.BASE_URL_LOCAL}uploads/users/${fileName}`,
@@ -202,13 +139,9 @@ class Users  {
           req.user.id
         );
         res.status(200).send(user);
-      } catch (error) {
-        res.status(500).send({
-          error: "Upload  başarılı fakat kayıt sırasında bir problem oluştu.",
-        });
-      }
-    });
-  }
+      });
+    }
+  );
 }
 
 export default new Users();

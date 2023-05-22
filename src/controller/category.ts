@@ -5,33 +5,30 @@ import { Category } from "../interface/model/Category";
 import { TypeOrmError } from "../interface/error/TypeORMError";
 import CustomError from "../utils/CustomError";
 import { UniqueText } from "../utils/UniqueText";
+import * as asyncErrorWrapper from "express-async-handler";
 
 class Categories {
-  async getCategory(
-    req: CustomAuthRequest<Category>,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
+  getCategory = asyncErrorWrapper(
+    async (
+      req: CustomAuthRequest<Category>,
+      res: Response,
+      next: NextFunction
+    ) => {
       const category = await CategoryService.list();
       res.status(200).json({
         success: true,
         data: category,
       });
-    } catch (error) {
-      res.status(500).send({
-        message: "Server Internal Error",
-      });
     }
-  }
+  );
 
-  async findCategory(
-    req: CustomAuthRequest<Category>,
-    res: Response,
-    next: NextFunction
-  ) {
-    const { id } = req.params as unknown as Category;
-    try {
+  findCategory = asyncErrorWrapper(
+    async (
+      req: CustomAuthRequest<Category>,
+      res: Response,
+      next: NextFunction
+    ) => {
+      const { id } = req.params as unknown as Category;
       const category = await CategoryService.find({ id });
       if (!category) {
         return next(new CustomError("There is no such thing.", 400));
@@ -40,50 +37,36 @@ class Categories {
         success: true,
         data: category,
       });
-    } catch (error) {
-      res.status(500).send({
-        message: "Server Internal Error",
-      });
     }
-  }
+  );
 
-  async createCategory(
-    req: CustomAuthRequest<Category>,
-    res: Response,
-    next: NextFunction
-  ) {
-    const { name } = req.body;
-    try {
+  createCategory = asyncErrorWrapper(
+    async (
+      req: CustomAuthRequest<Category>,
+      res: Response,
+      next: NextFunction
+    ) => {
+      const { name } = req.body;
       const category = await CategoryService.create({ name });
       res.status(200).json({
         success: true,
         data: category,
       });
-    } catch (error) {
-      const uniqueError: TypeOrmError = error;
-      if (uniqueError?.driverError?.code === "23505") {
-        return next(
-          new CustomError(UniqueText(uniqueError.driverError.detail), 400)
-        );
-      }
-      res.status(500).send({
-        message: "Server Internal Error",
-      });
     }
-  }
+  );
 
-  async updateCategory(
-    req: CustomAuthRequest<Category>,
-    res: Response,
-    next: NextFunction
-  ) {
-    const { id } = req.params as unknown as Category;
-    const category = await CategoryService.find({ id });
-    if (!category) {
-      return next(new CustomError("There is no such thing.", 400));
-    }
-    const { name } = req.body;
-    try {
+  updateCategory = asyncErrorWrapper(
+    async (
+      req: CustomAuthRequest<Category>,
+      res: Response,
+      next: NextFunction
+    ) => {
+      const { id } = req.params as unknown as Category;
+      const categoryFind = await CategoryService.find({ id });
+      if (!categoryFind) {
+        return next(new CustomError("There is no such thing.", 400));
+      }
+      const { name } = req.body;
       const category = await CategoryService.update({ name }, id);
       if (!category) {
         return next(new CustomError("There is no such thing.", 400));
@@ -92,48 +75,27 @@ class Categories {
         success: true,
         data: category,
       });
-    } catch (error) {
-      const uniqueError: TypeOrmError = error;
-      if (uniqueError?.driverError?.code === "23505") {
-        return next(
-          new CustomError(UniqueText(uniqueError.driverError.detail), 400)
-        );
+    }
+  );
+
+  deleteCategory = asyncErrorWrapper(
+    async (
+      req: CustomAuthRequest<Category>,
+      res: Response,
+      next: NextFunction
+    ) => {
+      const { id } = req.params as unknown as Category;
+      const category = await CategoryService.find({ id });
+      if (!category) {
+        return next(new CustomError("There is no such thing.", 400));
       }
-      res.status(500).send({
-        message: "Server Internal Error",
-      });
-    }
-  }
-
-  async deleteCategory(
-    req: CustomAuthRequest<Category>,
-    res: Response,
-    next: NextFunction
-  ) {
-    const { id } = req.params as unknown as Category;
-    const category = await CategoryService.find({ id });
-    if (!category) {
-      return next(new CustomError("There is no such thing.", 400));
-    }
-    try {
       await CategoryService.delete(id);
-
       res.status(200).json({
         success: true,
         message: "Successfuly delete.",
       });
-    } catch (error) {
-      const uniqueError: TypeOrmError = error;
-      if (uniqueError?.driverError?.code === "23505") {
-        return next(
-          new CustomError(UniqueText(uniqueError.driverError.detail), 400)
-        );
-      }
-      res.status(500).send({
-        message: "Server Internal Error",
-      });
     }
-  }
+  );
 }
 
 export default new Categories();
