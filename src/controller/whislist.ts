@@ -4,41 +4,42 @@ import WishService from "../services/WishService";
 import PostService from "../services/PostService";
 import CustomError from "../utils/CustomError";
 import { WishList } from "../interface/model/Wishlist";
-
+import * as asyncErrorWrapper from "express-async-handler";
 class WhisList {
-  async getWhislist(
-    req: CustomAuthRequest<WishList>,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
-      const post = await WishService.list({}, [
-        "user",
-        "post",
-        "post.categories",
-        "post.photos",
-      ]);
-      res.status(200).json({
-        success: true,
-        data: post,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).send({
-        message: "Server Internal Error",
-      });
+  getWhislist = asyncErrorWrapper(
+    async (
+      req: CustomAuthRequest<WishList>,
+      res: Response,
+      next: NextFunction
+    ) => {
+      try {
+        const post = await WishService.list({}, [
+          "user",
+          "post",
+          "post.categories",
+          "post.photos",
+        ]);
+        res.status(200).json({
+          success: true,
+          data: post,
+        });
+      } catch (error) {
+        console.log(error);
+        res.status(500).send({
+          message: "Server Internal Error",
+        });
+      }
     }
-  }
+  );
 
-  async findWhislist(
-    req: CustomAuthRequest<WishList>,
-    res: Response,
-    next: NextFunction
-  ) {
-    const { id } = req.params as unknown as WishList;
-
-    try {
-      const wishList = await WishService.find({id}, [
+  findWhislist = asyncErrorWrapper(
+    async (
+      req: CustomAuthRequest<WishList>,
+      res: Response,
+      next: NextFunction
+    ) => {
+      const { id } = req.params as unknown as WishList;
+      const wishList = await WishService.find({ id }, [
         "user",
         "post",
         "post.categories",
@@ -51,22 +52,16 @@ class WhisList {
         success: true,
         data: wishList,
       });
-    } catch (error) {
-      console.log(error);
-      res.status(500).send({
-        message: "Server Internal Error",
-      });
     }
-  }
+  );
 
-  async createWhislist(
-    req: CustomAuthRequest<WishList>,
-    res: Response,
-    next: NextFunction
-  ) {
-    const { postId } = req.body;
-
-    try {
+  createWhislist = asyncErrorWrapper(
+    async (
+      req: CustomAuthRequest<WishList>,
+      res: Response,
+      next: NextFunction
+    ) => {
+      const { postId } = req.body;
       const post = await PostService.find({ id: postId }, [
         "categories",
         "photos",
@@ -82,21 +77,15 @@ class WhisList {
         success: true,
         data: wishlist,
       });
-    } catch (error) {
-      console.log(error);
-      res.status(500).send({
-        message: "Server Internal Error",
-      });
     }
-  }
+  );
 
-  async deleteWhislist(
+   deleteWhislist = asyncErrorWrapper(async (
     req: CustomAuthRequest<WishList>,
     res: Response,
     next: NextFunction
-  ) {
+  ) => {
     const { id } = req.params as unknown as WishList;
-    try {
       const wishList = await WishService.find({ id });
       if (!wishList) {
         return next(new CustomError("There is no such wishlist.", 400));
@@ -106,13 +95,7 @@ class WhisList {
         success: true,
         message: "Successfuly Delete.",
       });
-    } catch (error) {
-      console.log(error);
-      res.status(500).send({
-        message: "Server Internal Error",
-      });
-    }
-  }
+  })
 }
 
 export default new WhisList();
