@@ -7,6 +7,7 @@ import CustomError from "../utils/CustomError";
 import { CustomAuthRequest } from "../interface/request/CustomAuthRequest";
 import { Post } from "../interface/model/Post";
 import * as asyncErrorWrapper from "express-async-handler";
+import PostElasticSearch from "../../elasticsearch/service/PostElasticSearch";
 class Posts {
   getPosts = asyncErrorWrapper(
     async (req: CustomAuthRequest<Post>, res: Response, next: NextFunction) => {
@@ -31,7 +32,8 @@ class Posts {
         categories: category,
         user: req.user,
         photos: photo,
-      });
+      }) as Post;
+      PostElasticSearch.createIndex(post)
       res.status(200).json({
         success: true,
         data: post,
