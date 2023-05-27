@@ -76,11 +76,13 @@ class Posts {
   deletePost = asyncErrorWrapper(
     async (req: CustomAuthRequest<Post>, res: Response, next: NextFunction) => {
       const { id } = req.params as unknown as Post;
-      const postFind = await PostService.find({ id });
+      const postFind = await PostService.find({ id }) as Post;
       if (!postFind) {
         return next(new CustomError("There is no such post.", 400));
       }
       await PostService.delete(id);
+      PostElasticSearch.deleteIndex(postFind)
+
       res.status(200).json({
         success: true,
         message: "Successfuly delete.",

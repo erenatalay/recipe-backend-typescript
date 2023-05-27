@@ -27,6 +27,16 @@ class PostElasticSearch {
       console.log(err);
     }
   };
+  deleteIndex = async (request: Post) => {
+    try {
+      await client.delete({
+        index: "recipe",
+        id: String(55),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 }
 
 export default new PostElasticSearch();
