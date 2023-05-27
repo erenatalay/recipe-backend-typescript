@@ -59,11 +59,13 @@ class Posts {
         {
           name,
           categories: category,
-          user: user.id,
+          user: user,
           photos: photo,
         },
         id
       );
+      PostElasticSearch.updateIndex(post)
+
       res.status(200).json({
         success: true,
         data: post,
