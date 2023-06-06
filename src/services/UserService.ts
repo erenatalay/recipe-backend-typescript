@@ -1,7 +1,7 @@
 import BaseService  from "./BaseService";
 import { User } from "../entity/User";
 
-class UserService extends BaseService {
+ export class UserService extends BaseService {
     constructor(){
         super(User)
     }
