@@ -11,9 +11,9 @@ class CategoryRouter {
         this.initialiseRoutes();
     }
     private initialiseRoutes(): void {
-        this.router.get(`/`, CategoryController.getCategory);
-        this.router.get(`/:id`,idChecker(), CategoryController.findCategory);
-        this.router.post(`/`,validate(CategoryValidation.createValidation()), CategoryController.createCategory);
+        this.router.get(`/`, authenticate,CategoryController.getCategory);
+        this.router.get(`/:id`,authenticate,idChecker(), CategoryController.findCategory);
+        this.router.post(`/`,authenticate,validate(CategoryValidation.createValidation()), CategoryController.createCategory);
         this.router.put(`/:id`,authenticate,idChecker(),validate(CategoryValidation.createValidation()), CategoryController.updateCategory);
         this.router.delete(`/:id`,authenticate,idChecker(), CategoryController.deleteCategory);
     }

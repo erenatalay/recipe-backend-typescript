@@ -17,5 +17,5 @@
   },
   "include": [
    "./src/**/*.ts"
-, "src/__test__/user.test.ts"  ]
+, "src/__test__/cateogry.test.ts"  ]
 }
