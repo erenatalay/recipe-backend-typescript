@@ -10,7 +10,8 @@
       "swagger-autogen": "node swagger.js",
       "predev": "npm run swagger",
       "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec\"",
-      "swagger": "tsoa spec"
+      "swagger": "tsoa spec",
+      "build": "tsc"
    },
    "author": "",
    "license": "ISC",
