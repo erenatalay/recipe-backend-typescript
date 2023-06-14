@@ -31,7 +31,7 @@ class PostElasticSearch {
     try {
       await client.delete({
         index: "recipe",
-        id: String(55),
+        id: String(request.id),
       });
     } catch (err) {
       console.log(err);

@@ -10,7 +10,8 @@
       "rootDir": "./",
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
-      "allowSyntheticDefaultImports": true
+      "allowSyntheticDefaultImports": true,
+      "resolveJsonModule": true
    },
    "ts-node": {
       "esm": true
