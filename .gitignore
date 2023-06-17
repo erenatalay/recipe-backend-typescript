@@ -6,3 +6,4 @@ tmp/
 temp/
 .env
 src/uploads/*
+src/logs/*
