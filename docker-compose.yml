@@ -1,21 +1,14 @@
 version: '3'
 services:
-  express:
+  ts-node-docker:
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./:/usr/src/app
-    container_name: recipe-backend
+      dockerfile: Dockerfile.prod
+    command: node build/src/index.js
     networks:
       - node
-    expose:
-      - '3005'
-    ports:
-      - '3005:3005'
-    command: npm run start
   postgres:
     image: postgres:latest
     ports:
@@ -45,7 +38,17 @@ services:
         hard: -1
     networks:
       - node
-        
+    nginx:
+      build:
+        context: ./nginx
+      container_name: nginx
+      hostname: nginx
+      ports:
+        - "80:80"
+      depends_on:
+        - nodejs-app
+      networks:
+        - node
 volumes:
   data:
   elasticsearch-data:
