@@ -52,7 +52,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./proxy.conf:/etc/nginx/conf.d/default.conf
+      - ./default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - express
     networks:
