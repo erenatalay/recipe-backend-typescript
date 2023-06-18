@@ -7,6 +7,8 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     command: node build/src/index.js
+    networks:
+      - node
   postgres:
     image: postgres:latest
     ports:
@@ -17,6 +19,8 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
     volumes:
       - data:/data/db2
+    networks:
+      - node
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
     container_name: elasticsearch
@@ -32,7 +36,12 @@ services:
       memlock:
         soft: -1
         hard: -1
+    networks:
+      - node
 volumes:
   data:
   elasticsearch-data:
     driver: local
+networks:
+  node:
+    driver: bridge

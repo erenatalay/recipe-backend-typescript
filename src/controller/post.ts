@@ -21,7 +21,7 @@ class Posts {
 
   createPost = asyncErrorWrapper(
     async (req: CustomAuthRequest<Post>, res: Response, next: NextFunction) => {
-      const { name, categoryId, photoId } = req.body;
+      const { name, categoryId, photoId,description } = req.body;
       const category = await CategoryService.list({ id: In(categoryId) });
       const photo = await PostPhotoService.list({ id: In(photoId) });
       if (category?.length == 0) {
@@ -32,6 +32,7 @@ class Posts {
         categories: category,
         user: req.user,
         photos: photo,
+        description 
       }) as Post;
       PostElasticSearch.createIndex(post)
       res.status(200).json({
@@ -43,7 +44,7 @@ class Posts {
 
   updatePost = asyncErrorWrapper(
     async (req: CustomAuthRequest<Post>, res: Response, next: NextFunction) => {
-      const { name, categoryId, photoId } = req.body;
+      const { name, categoryId, photoId,description } = req.body;
       const { id } = req.params as unknown as Post;
       const user = req.user;
       const category = await CategoryService.list({ id: In(categoryId) });
@@ -61,6 +62,7 @@ class Posts {
           categories: category,
           user: user,
           photos: photo,
+          description
         },
         id
       );

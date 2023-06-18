@@ -4,6 +4,7 @@ import CategoryRouter from "./category";
 import PostRouter from "./post";
 import PostPhotosRouter from "./postPhoto";
 import WishListRouter from "./whislist";
+import SearchRouter from "./search";
 class MainRouter {
   public router = Router();
   constructor() {
@@ -15,6 +16,7 @@ class MainRouter {
     this.router.use(`/post`, PostRouter);
     this.router.use(`/post-photos`, PostPhotosRouter);
     this.router.use(`/wishlist`, WishListRouter);
+    this.router.use(`/search`, SearchRouter);
   }
 }
 const getRouter = new MainRouter();
