@@ -1,12 +1,11 @@
 {
    "name": "recipe-backend",
    "version": "1.0.0",
-   "type": "module",
    "description": "",
    "main": "index.js",
    "scripts": {
       "test": "jest",
-      "start": "node src/index.ts ",
+      "start": "ts-node --esm src/index.ts",
       "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
       "swagger-autogen": "node swagger.js",
       "predev": "npm run swagger",
