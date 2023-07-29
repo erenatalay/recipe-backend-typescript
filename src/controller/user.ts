@@ -56,7 +56,7 @@ class Users {
     }
   );
 
-  updateUser = asyncErrorWrapper(
+updateUser = asyncErrorWrapper(
     async (req: CustomAuthRequest<User>, res: Response, next: NextFunction) => {
       const { id } = req.user;
       const user = await UserService.find({ id });
