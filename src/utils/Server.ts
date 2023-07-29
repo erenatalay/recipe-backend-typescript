@@ -8,7 +8,7 @@ import routers from "../routes";
 import errorHandler from "../middlewares/errorHandler";
 import * as morgan from "morgan";
 const app = express();
-const swaggerDocument = require("../../swagger_output.json");
+import * as swaggerDocument from "../../swagger_output.json"
 config();
 
 app.use(express.json());
