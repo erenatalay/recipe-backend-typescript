@@ -7,3 +7,4 @@ temp/
 .env
 src/uploads/*
 src/logs/*
+src/ssl/*
