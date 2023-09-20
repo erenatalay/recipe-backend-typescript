@@ -6,7 +6,6 @@ import * as swaggerUi from "swagger-ui-express";
 import config from "../config";
 import routers from "../routes";
 import errorHandler from "../middlewares/errorHandler";
-import * as morgan from "morgan";
 const app = express();
 import * as swaggerDocument from "../../swagger_output.json"
 config();
